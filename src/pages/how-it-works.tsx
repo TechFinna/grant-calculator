@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default function HowItWorks() {

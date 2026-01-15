@@ -23,10 +23,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-              Q
+              G
             </div>
             <span>
-              Québec<span className="text-secondary">Funding</span>
+              Grant<span className="text-secondary">Calculator</span>
             </span>
           </Link>
 

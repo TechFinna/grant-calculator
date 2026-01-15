@@ -1,11 +1,11 @@
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "wouter";
+import Link from "next/link";
 import { ArrowRight, CheckCircle2, Calculator, BadgeDollarSign, FileText, Building2, ShieldCheck, Cpu, Globe } from "lucide-react";
 import { MOCK_TESTIMONIALS } from "@/lib/data";
 
-export default function Home() {
+export default function Homepage() {
   return (
     <Layout>
       {/* Hero Section */}

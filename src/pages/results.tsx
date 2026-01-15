@@ -11,7 +11,7 @@ import { FundingChart } from "@/components/funding-chart";
 import { PROGRAMS, Program } from "@/lib/data";
 import { formatCurrency, cn } from "@/lib/utils";
 import { AlertCircle, Download, Share2, CheckCircle2, ArrowRight } from "lucide-react";
-import { Link } from "wouter";
+import Link from "next/link";
 
 export default function Results() {
   const [matches, setMatches] = useState<Program[]>([]);

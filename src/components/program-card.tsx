@@ -1,11 +1,10 @@
-import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ArrowRight, AlertCircle } from "lucide-react";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { Program } from "@/lib/data";
-
+import Link from "next/link";
 interface ProgramCardProps {
   program: Program;
   relevance?: "High" | "Medium" | "Low";
