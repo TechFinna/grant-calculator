@@ -25,11 +25,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { formatCurrency } from "@/lib/utils";
 import { useRouter } from "next/router";
 
@@ -214,6 +210,47 @@ export default function Calculator() {
     }
   };
 
+  const getPayload = async () => {
+    const totalBudget = data.budgetItems.reduce(
+      (acc, item) => acc + (Number(item.cost) || 0),
+      0
+    );
+
+    const payload = {
+      ...data,
+      totalBudget,
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch("http://20.119.101.162/calculate", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem("qc-funding-result");
+        throw new Error(`Backend error: ${res.status}`);
+      }
+
+      const json = await res.json();
+
+      // ✅ store backend response for Results page
+      localStorage.setItem("qc-funding-result", JSON.stringify(json));
+
+      console.log("CALCULATOR_PAYLOAD:", payload);
+      console.log("BACKEND_RESPONSE:", json);
+
+      return payload;
+    } catch (err) {
+      console.error("Failed to calculate:", err);
+      localStorage.removeItem("qc-funding-result"); // avoid stale/partial data
+      return payload;
+    }
+  };
+
+
   const totalBudget = data.budgetItems.reduce(
     (acc, item) => acc + item.cost,
     0,
@@ -303,7 +340,7 @@ export default function Calculator() {
     <Layout>
       <div className="bg-slate-50 min-h-screen py-8">
         <div className="container mx-auto px-4 max-w-5xl">
-          <button onClick={()=>checkState()}>CHeck state</button>
+          <button onClick={()=>getPayload()}>console saved storage</button>
           {/* Header & Progress */}
           <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -1496,7 +1533,8 @@ export default function Calculator() {
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
 
-                <Button
+                {
+                  currentStep >= 0 && currentStep<4 ? (<Button
                   onClick={nextStep}
                   disabled={!isStepValid()}
                   className={cn(
@@ -1505,11 +1543,29 @@ export default function Calculator() {
                       "bg-emerald-600 hover:bg-emerald-700",
                   )}
                 >
-                  {currentStep === STEPS.length - 1 ? "Calculate" : "Next"}
+                  Next
                   {currentStep !== STEPS.length - 1 && (
                     <ArrowRight className="ml-2 h-4 w-4" />
                   )}
-                </Button>
+                </Button>):(
+                  <Button
+                    onClick={async () => {
+                      await getPayload();     // ✅ store qc-funding-result first
+                      router.push("/results"); // ✅ then go to results
+                    }}
+                    disabled={!isStepValid()}
+                    className={cn(
+                      "w-32",
+                      currentStep === STEPS.length - 1 &&
+                        "bg-emerald-600 hover:bg-emerald-700"
+                    )}
+                  >
+                    Calculate
+                  </Button>
+                )
+                }
+                
+                
               </div>
             </Card>
           </div>
